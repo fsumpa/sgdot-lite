@@ -16,6 +16,5 @@ nodes and links.
 The tools sub-package contains the **grid_optimizer, grid_visualizer, io** and **plot** modules.
 
 - The **grid_optimizer** modules encapsulates GridOptimizer class which contains methods for optimizing a Grid object.
-- The **grid_visualizer** modules encapsulates GridVisualizer class which contains methods for visualise a Grid object using opencv.
 - The **io** module contains functions to handle files.
-- The **plot** module enables to display the grid object in a 2D plot as well as displaying the plot of the results of the optimizations
+- The **plot** module enables to display the plot of the results of the optimizations
