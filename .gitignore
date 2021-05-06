@@ -1,0 +1,9 @@
+build/
+data/
+dist/
+draft.ipynb
+script_pypi
+setup.py
+sgdot_lite.egg-info/
+sgdot_lite/
+venv/
