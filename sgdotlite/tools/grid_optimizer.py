@@ -17,6 +17,7 @@ from sklearn.cluster import KMeans
 from multiprocessing import Pool
 
 from sgdotlite.tools.io import make_folder
+import sgdotlite.tools.plot as plot
 
 
 class GridOptimizer:
@@ -30,8 +31,6 @@ class GridOptimizer:
     mst_algorithm_linking_hubs (str):
         Name of the minimum spanning tree algorithm used for connecting the
         hubs.
-
-
 
     sa_runtime (float):
         Simulated Annealing (SA) parameter.
@@ -620,6 +619,7 @@ class GridOptimizer:
         for index in segment_dict:
             grid.set_segment(index, segment_dict[index])
 
+    #  --------------------- K-MEANS CLUSTERING ---------------------#
     def k_means_cluster_centers(self, grid, k_number_of_clusters):
         """
         This method uses a k-means clustering algorithm from sklearn
@@ -2972,8 +2972,6 @@ class GridOptimizer:
                   + f"{weight_of_attraction}\n\n")
 
         # import and  initialize parameters
-        arrow_color = (0, 255, 200)
-        thickness = 10
 
         allocation_capacity = grid.get_default_hub_capacity()
         price_household = grid.get_price_household()
@@ -3009,11 +3007,12 @@ class GridOptimizer:
         # the method is interrupted)
         grid_copy = copy.deepcopy(grid)
 
-        # find out what x and y coordinat ranges the nodes are in
+        # find out what x and y coordinate ranges the nodes are in
         x_range = [grid_copy.get_nodes()['x_coordinate'].min(),
                    grid_copy.get_nodes()['x_coordinate'].max()]
         y_range = [grid_copy.get_nodes()['y_coordinate'].min(),
                    grid_copy.get_nodes()['y_coordinate'].max()]
+
         # Create log dataframe that will store info about run
         algo_run_log = pd.DataFrame({'time': pd.Series(
             [0]

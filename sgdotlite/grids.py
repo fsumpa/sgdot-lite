@@ -73,6 +73,7 @@ class Grid:
     distribution_cable_resistivity: float
         Electrical resistivity of the distribution cables in [Ohm*mm²/m].
     """
+
     # -------------------------- CONSTRUCTOR --------------------------#
 
     def __init__(self,

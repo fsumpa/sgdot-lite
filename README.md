@@ -5,7 +5,7 @@ topology for swarm-grids. It uses satellite imagery of villages to be
 electrified and enables designing and optimizing a grid with a tree-star
 configuration.
 
-The grids module containes the Grid class. A grid essentially contains two
+The **grids** module containes the Grid class. A grid essentially contains two
 DataFrames representing the nodes and the links composing the network as well as
 a set of attributes representing the price of the grid's components.
 The nodes represent houses to be connected to the grid and the links represent
