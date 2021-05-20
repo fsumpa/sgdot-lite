@@ -922,7 +922,7 @@ class Grid:
 
         # If there are no meterhubs in the grid, the price function
         # returns a very large value
-        if self.get_hubs().shape[0] == 0:
+        if (self.get_hubs().shape[0] == 0) or (self.get_links().shape[0] == 0):
             return 999999999999999.1
 
         # Compute total interhub cable length in meter

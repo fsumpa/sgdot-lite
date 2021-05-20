@@ -5,5 +5,7 @@ draft.ipynb
 script_pypi
 setup.py
 sgdotlite.egg-info/
-sgdotlite/
 venv/
+*__pycache__/
+*/__pycache__/
+*.ipynb_checkpoints/

@@ -235,14 +235,15 @@ class GridOptimizer:
 
         # First, clear links dataframe
         grid.clear_links()
-        grid_allocation_capacity = grid.get_hubs()['allocation_capacity'].sum()
-        if not grid.is_hub_capacity_constraint_too_strong() and\
-                grid_allocation_capacity > 0:
-            self.link_households_to_capacitated_hubs(
-                grid)
-        else:
-            self.link_households_to_nereast_hubs(grid)
 
+        if grid.get_hubs()['allocation_capacity'].sum() == 0:
+            self.link_households_to_nereast_hubs(grid)
+        else:
+            if not grid.is_hub_capacity_constraint_too_strong():
+                self.link_households_to_capacitated_hubs(grid)
+            else:
+                raise Warning(
+                    f"allocation capacity limit doesn't allow to connect nodes")
         self.link_hubs(grid)
 
     # ------------ MINIMUM SPANNING TREE ALGORITHM ------------ #
@@ -717,7 +718,8 @@ class GridOptimizer:
         # Set selected nodes to meterhubs
         for label in label_nearest:
             grid.set_node_type(label, "meterhub")
-        self.link_nodes(grid)
+        if not (grid.is_hub_capacity_constraint_too_strong()):
+            self.link_nodes(grid)
 
     def get_expected_hub_number_from_k_means(self, grid):
         """
@@ -765,7 +767,6 @@ class GridOptimizer:
             min(grid.get_nodes().shape[0],
                 max(1, int(num_nodes / 10)))
         )
-
         # initialize DataFrame to store number of hubs and according price
         price_per_number_hub_df = pd.DataFrame({"#hubs": [],
                                                 "price": []})
@@ -3212,7 +3213,6 @@ class GridOptimizer:
                     node=hub,
                     delta_x=vector_resulting[0] / meter_per_default_unit,
                     delta_y=vector_resulting[1] / meter_per_default_unit)
-
             self.link_nodes(grid_copy)
             algo_run_log['time'][n] = time.time() - start_time
             algo_run_log['virtual_price'][n] = (grid_copy.price()
