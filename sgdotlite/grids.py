@@ -81,8 +81,8 @@ class Grid:
                  nodes=pd.DataFrame(
                      {
                          'label': pd.Series([], dtype=str),
-                         'x_coordinate': pd.Series([], dtype=np.dtype(int)),
-                         'y_coordinate': pd.Series([], dtype=np.dtype(int)),
+                         'x_coordinate': pd.Series([], dtype=np.dtype(float)),
+                         'y_coordinate': pd.Series([], dtype=np.dtype(float)),
                          'node_type': pd.Series([], dtype=str),
                          'type_fixed': pd.Series([], dtype=bool),
                          'segment': pd.Series([], dtype=np.dtype(str)),
@@ -506,9 +506,9 @@ class Grid:
         ----------
         label: str
             node label.
-        x_coordinate: int
+        x_coordinate: float
             x coordinate of node in default unit.
-        y_coordinate: int
+        y_coordinate: float
             y coordinate of node in default unit.
         node_type: str
             node_type of the node (either 'household', 'meterhub'
@@ -526,8 +526,8 @@ class Grid:
 
         if allocation_capacity == 0 and 'hub' in node_type:
             allocation_capacity = self.__default_hub_capacity
-        self.__nodes.loc[str(label)] = [int(x_coordinate),
-                                        int(y_coordinate),
+        self.__nodes.loc[str(label)] = [x_coordinate,
+                                        y_coordinate,
                                         node_type,
                                         type_fixed,
                                         segment,
