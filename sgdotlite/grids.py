@@ -81,8 +81,8 @@ class Grid:
                  nodes=pd.DataFrame(
                      {
                          'label': pd.Series([], dtype=str),
-                         'x_coordinate': pd.Series([], dtype=np.dtype(int)),
-                         'y_coordinate': pd.Series([], dtype=np.dtype(int)),
+                         'x_coordinate': pd.Series([], dtype=np.dtype(float)),
+                         'y_coordinate': pd.Series([], dtype=np.dtype(float)),
                          'node_type': pd.Series([], dtype=str),
                          'type_fixed': pd.Series([], dtype=bool),
                          'segment': pd.Series([], dtype=np.dtype(str)),
