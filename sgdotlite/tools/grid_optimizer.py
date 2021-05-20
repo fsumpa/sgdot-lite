@@ -219,7 +219,7 @@ class GridOptimizer:
 
     # ------------ CONNECT NODES USING TREE-STAR SHAPE ------------#
 
-    def link_nodes(self, grid):
+    def connect_nodes(self, grid):
         """
         This method create links between the nodes of the grid:
         it creates a link bewteen each household and the nearest meterhub
@@ -237,18 +237,18 @@ class GridOptimizer:
         grid.clear_links()
 
         if grid.get_hubs()['allocation_capacity'].sum() == 0:
-            self.link_households_to_nereast_hubs(grid)
+            self.connect_household_to_nereast_hubs(grid)
         else:
             if not grid.is_hub_capacity_constraint_too_strong():
-                self.link_households_to_capacitated_hubs(grid)
+                self.connect_household_to_capacitated_hubs(grid)
             else:
                 raise Warning(
                     f"allocation capacity limit doesn't allow to connect nodes")
-        self.link_hubs(grid)
+        self.connect_hubs(grid)
 
     # ------------ MINIMUM SPANNING TREE ALGORITHM ------------ #
 
-    def link_hubs(self, grid):
+    def connect_hubs(self, grid):
         """
         This method creates links between all meterhubs following
         Prim's or Kruskal minimum spanning tree method depending on the
@@ -261,13 +261,13 @@ class GridOptimizer:
         """
 
         if self.mst_algorithm_linking_hubs == "Prims":
-            self.link_hubs_using_MST_Prims(grid)
+            self.connect_hubs_using_MST_Prims(grid)
         elif self.mst_algorithm_linking_hubs == "Kruskal":
-            self.link_hubs_using_MST_Kruskal(grid)
+            self.connect_hubs_using_MST_Kruskal(grid)
         else:
             raise Exception("Invalid value provided for mst_algorithm.")
 
-    def link_hubs_using_MST_Prims(self, grid):
+    def connect_hubs_using_MST_Prims(self, grid):
         """
         This  method creates links between all meterhubs following
         Prim's minimum spanning tree method. The idea goes as follow:
@@ -348,7 +348,7 @@ class GridOptimizer:
                     hubs.at[index_closest_hub_to_forest, 'in_forest'] = True
                     count += 1
 
-    def link_hubs_using_MST_Kruskal(self, grid):
+    def connect_hubs_using_MST_Kruskal(self, grid):
         """
         This  method creates links between all meterhubs following
         Kruskal's minimum spanning tree method from scpicy.sparse.csgraph.
@@ -391,7 +391,7 @@ class GridOptimizer:
 
     # ------------------- ALLOCATION ALGORITHMS -------------------#
 
-    def link_households_to_nereast_hubs(self, grid):
+    def connect_household_to_nereast_hubs(self, grid):
         """
         This method create a link between each household
         and the nereast meterhub of the same segment.
@@ -432,7 +432,7 @@ class GridOptimizer:
                 # Finally add the link to the grid
                 grid.add_link(index_node, index_closest_meterhub)
 
-    def link_households_to_capacitated_hubs(self, grid):
+    def connect_household_to_capacitated_hubs(self, grid):
         """
         This method assigns each household of a grid to a hub
         of the same segment taking into consideration the maximum
@@ -577,7 +577,7 @@ class GridOptimizer:
         # Connect the nodes using MST
         grid.clear_links()
 
-        self.link_hubs(grid)
+        self.connect_hubs(grid)
 
         # Create list containing links index sorted by link's distance
         index_link_sorted_by_distance = [
@@ -719,7 +719,7 @@ class GridOptimizer:
         for label in label_nearest:
             grid.set_node_type(label, "meterhub")
         if not (grid.is_hub_capacity_constraint_too_strong()):
-            self.link_nodes(grid)
+            self.connect_nodes(grid)
 
     def get_expected_hub_number_from_k_means(self, grid):
         """
@@ -859,7 +859,7 @@ class GridOptimizer:
         if grid.get_nodes().shape[0] > 0:
             grid.set_nodes(grid.get_nodes().drop(grid.get_nodes().index[-1]))
             if not grid.is_hub_capacity_constraint_too_strong():
-                self.link_nodes(grid)
+                self.connect_nodes(grid)
 
     # ---------- MAKE GRID COMPLIANT WITH CAPACITY CONSTRAINTS --------- #
 
@@ -1372,7 +1372,7 @@ class GridOptimizer:
             make_folder(path)
 
             population_df.to_csv(path + '/population.csv')
-            self.link_nodes(grid)
+            self.connect_nodes(grid)
             grid.export(folder=output_folder,
                         backup_name=run_name,
                         allow_saving_in_existing_backup_folder=True)
@@ -1777,7 +1777,7 @@ class GridOptimizer:
             grid.set_node_type(hub_index, 'meterhub')
 
         # now link nodes
-        self.link_nodes(grid)
+        self.connect_nodes(grid)
 
         return - grid.price()
 
@@ -2137,10 +2137,10 @@ class GridOptimizer:
                                                     swap_option=swap_option)
                     if algo_status == 'good swap accepted':
                         number_of_good_swaps += 1
-                        self.link_nodes(grid)
+                        self.connect_nodes(grid)
                     elif algo_status == 'bad swap accepted':
                         number_of_bad_swaps += 1
-                        self.link_nodes(grid)
+                        self.connect_nodes(grid)
                     else:
                         algo_status = ''
                     if print_log is True:
@@ -2201,7 +2201,7 @@ class GridOptimizer:
             grid_nodes_final = pd.concat([grid_nodes_final, grid.get_nodes()])
             grid.clear_nodes_and_links()
             grid.set_nodes(grid_nodes_final)
-            self.link_nodes(grid)
+            self.connect_nodes(grid)
             if print_progress_bar:
                 counter_segment += 1
         if save_output:
@@ -2210,7 +2210,7 @@ class GridOptimizer:
 
             if lower_grid_price < grid.price():
                 grid.set_nodes(nodes_df_corresponding_to_lower_price)
-                self.link_nodes(grid)
+                self.connect_nodes(grid)
 
             grid.export(folder=folder,
                         backup_name=backup_name,
@@ -2283,7 +2283,7 @@ class GridOptimizer:
             while grid.get_hubs().shape[0] < number_of_hubs:
                 household_picked = random.choice(grid.get_households().index)
                 grid.flip_node(household_picked)
-            self.link_nodes(grid)
+            self.connect_nodes(grid)
             grid_prices.append(grid.price())
 
         self.nr_optimization(grid,
@@ -2359,7 +2359,7 @@ class GridOptimizer:
                 grid.set_links(backup_grid_links)
                 return 'bad flip rejected'
             else:
-                self.link_nodes(grid)
+                self.connect_nodes(grid)
             # delta_price is the price difference between the former
             # and new configuration
             delta_price = abs(grid.price()-initial_price)
@@ -2441,7 +2441,7 @@ class GridOptimizer:
             backup_grid_nodes = grid.get_nodes()
             backup_grid_links = grid.get_links()
             grid.swap_random(swap_option=swap_option)
-            self.link_nodes(grid)
+            self.connect_nodes(grid)
             # delta_price is the price difference between the former
             # and new configuration
             delta_price = grid.price() - initial_price
@@ -3095,7 +3095,7 @@ class GridOptimizer:
                           + "possibilities are:\n- 'random'\n- 'k_means'\n- "
                           + "'relax_input_grid'")
 
-        self.link_nodes(grid_copy)
+        self.connect_nodes(grid_copy)
         start_time = time.time()
 
         # ---------- STEP 0 - Initialization step -------- #
@@ -3147,7 +3147,7 @@ class GridOptimizer:
                                  delta_y=(vector_resulting[1]
                                           / meter_per_default_unit),)
 
-        self.link_nodes(grid_copy)
+        self.connect_nodes(grid_copy)
         algo_run_log['time'][0] = time.time() - start_time
         # The solution have number_of_virtual_hubs households less than the
         # intermediate layout containing virtual hubs
@@ -3213,7 +3213,7 @@ class GridOptimizer:
                     node=hub,
                     delta_x=vector_resulting[0] / meter_per_default_unit,
                     delta_y=vector_resulting[1] / meter_per_default_unit)
-            self.link_nodes(grid_copy)
+            self.connect_nodes(grid_copy)
             algo_run_log['time'][n] = time.time() - start_time
             algo_run_log['virtual_price'][n] = (grid_copy.price()
                                                 - (number_of_virtual_hubs
@@ -3284,7 +3284,7 @@ class GridOptimizer:
 
         for node_chosen in node_choosen_to_be_hubs:
             grid_copy.flip_node(node_chosen)
-        self.link_nodes(grid_copy)
+        self.connect_nodes(grid_copy)
         n_final = number_of_relaxation_steps + 1
         algo_run_log['time'][n_final] = time.time() - start_time
         algo_run_log['virtual_price'][n_final] = grid_copy.price()
@@ -3514,35 +3514,35 @@ class GridOptimizer:
         grid.shift_node(node=hub,
                         delta_x=delta,
                         delta_y=0)
-        self.link_nodes(grid)
+        self.connect_nodes(grid)
         price_pos_x = grid.price()
 
         # compute price of configuration with hub shifted from (- delta, 0)
         grid.shift_node(node=hub,
                         delta_x=- 2 * delta,
                         delta_y=0)
-        self.link_nodes(grid)
+        self.connect_nodes(grid)
         price_neg_x = grid.price()
 
         # compute price of configuration with hub shifted from (0, delta)
         grid.shift_node(node=hub,
                         delta_x=delta,
                         delta_y=delta)
-        self.link_nodes(grid)
+        self.connect_nodes(grid)
         price_pos_y = grid.price()
 
         # compute price of configuration with hub shifted from (0, - delta)
         grid.shift_node(node=hub,
                         delta_x=0,
                         delta_y=- 2 * delta)
-        self.link_nodes(grid)
+        self.connect_nodes(grid)
         price_neg_y = grid.price()
 
         # Shift hub back to initial position
         grid.shift_node(node=hub,
                         delta_x=0,
                         delta_y=delta)
-        self.link_nodes(grid)
+        self.connect_nodes(grid)
 
         gradient = ((price_pos_x - price_neg_x) / delta,
                     (price_pos_y - price_neg_y) / delta)
@@ -3583,11 +3583,11 @@ class GridOptimizer:
             grid.shift_node(hub,
                             - amplitude * gradient[0],
                             - amplitude * gradient[1])
-            self.link_nodes(grid)
+            self.connect_nodes(grid)
             amplitude *= 3
             counter += 1
 
             price_after_shift = grid.price()
         grid.set_nodes(nodes)
         grid.set_links(links)
-        self.link_nodes(grid)
+        self.connect_nodes(grid)

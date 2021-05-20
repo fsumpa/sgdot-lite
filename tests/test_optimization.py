@@ -40,7 +40,7 @@ class TestOptimization(unittest.TestCase):
         """ Code that runs before every test"""
         pass
 
-    def test_link_nodes_to_nereast_hubs(self):
+    def test_connect_nodes_to_nereast_hubs(self):
 
         self.grid.add_node('0', 10, 20, 'household', False, '0')
         self.grid.add_node('1', 50, 67, 'household', False, '0')
@@ -48,7 +48,7 @@ class TestOptimization(unittest.TestCase):
         self.grid.add_node('3', 82, 34, 'meterhub', False, '0')
         self.grid.add_node('4', 15, 70, 'powerhub', False, '0')
 
-        self.opt.link_households_to_nereast_hubs(self.grid)
+        self.opt.connect_household_to_nereast_hubs(self.grid)
 
         self.assertEqual(int(self.grid.get_links()['distance'][0]), 91)
         self.assertEqual(int(self.grid.get_links()['distance'][1]), 63)
@@ -56,7 +56,7 @@ class TestOptimization(unittest.TestCase):
         self.assertEqual(self.grid.get_links()['type'][0], 'distribution')
         self.assertEqual(self.grid.get_links()['type'][1], 'distribution')
 
-    def test_link_nodes_to_capacitated_hubs(self):
+    def test_connect_nodes_to_capacitated_hubs(self):
         self.grid.add_node('0', 100, 100, 'meterhub', False, '0')
         self.grid.add_node('1', 90, 110, 'household', False, '0')
         self.grid.add_node('2', 90, 100, 'household', False, '0')
@@ -66,7 +66,7 @@ class TestOptimization(unittest.TestCase):
         self.grid.add_node('6', 200, 110, 'household', False, '0')
         self.grid.add_node('7', 200, 90, 'household', False, '0')
 
-        self.opt.link_nodes(self.grid)
+        self.opt.connect_nodes(self.grid)
 
         self.assertEqual(int(self.grid.get_links()['distance'][0]), 18)
         self.assertEqual(int(self.grid.get_links()['distance'][1]), 25)
@@ -132,7 +132,7 @@ class TestOptimization(unittest.TestCase):
                            type_fixed=False,
                            segment='1')
 
-        self.opt.link_hubs_using_MST_Kruskal(self.grid)
+        self.opt.connect_hubs_using_MST_Kruskal(self.grid)
 
         self.assertIs(self.grid.does_link_exist('0', '1'), True)
         self.assertIs(self.grid.does_link_exist('1', '2'), True)
@@ -177,7 +177,7 @@ class TestOptimization(unittest.TestCase):
                            type_fixed=False,
                            segment='1')
 
-        self.opt.link_hubs_using_MST_Prims(self.grid)
+        self.opt.connect_hubs_using_MST_Prims(self.grid)
 
         self.assertIs(self.grid.does_link_exist('0', '1'), True)
         self.assertIs(self.grid.does_link_exist('1', '2'), True)
