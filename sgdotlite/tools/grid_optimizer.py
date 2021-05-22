@@ -720,6 +720,8 @@ class GridOptimizer:
             grid.set_node_type(label, "meterhub")
         if not (grid.is_hub_capacity_constraint_too_strong()):
             self.connect_nodes(grid)
+        print(f"hubs after k-means: {grid.get_hubs().shape[0]}\nprice: {grid.price()}\n\n")
+
 
     def get_expected_hub_number_from_k_means(self, grid):
         """
@@ -3043,9 +3045,9 @@ class GridOptimizer:
             # square containing all nodes
             for i in range(number_of_virtual_hubs):
                 grid_copy.add_node(label=f'V{i}',
-                                   x_coordinate=random.randint(x_range[0],
+                                   x_coordinate=random.uniform(x_range[0],
                                                                x_range[1]),
-                                   y_coordinate=random.randint(y_range[0],
+                                   y_coordinate=random.uniform(y_range[0],
                                                                y_range[1]),
                                    node_type='meterhub',
                                    segment='0',
