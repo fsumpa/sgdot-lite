@@ -720,8 +720,6 @@ class GridOptimizer:
             grid.set_node_type(label, "meterhub")
         if not (grid.is_hub_capacity_constraint_too_strong()):
             self.connect_nodes(grid)
-        print(
-            f"hubs after k-means: {grid.get_hubs().shape[0]}\nprice: {grid.price()}\n\n")
 
     def get_expected_hub_number_from_k_means(self, grid):
         """
@@ -2968,9 +2966,6 @@ class GridOptimizer:
             price of a feasible grid layout
         """
 
-        print(f"number_of_hubs should be : {number_of_hubs}")
-        print(f"CP A0 ----> {grid.get_nodes()['node_type']}")
-
         if save_output:
             print(f"|{42 * '_'}| NETWORK RELAXATION |{42 * '_'}|\n")
             print(f"{35 * ' '}number of hubs:{8 * ' '} {number_of_hubs}\n")
@@ -3106,8 +3101,6 @@ class GridOptimizer:
             raise Warning("invalid first_guess_strategy parameter, "
                           + "possibilities are:\n- 'random'\n- 'k_means'\n- "
                           + "'relax_input_grid'")
-        print(
-            f"\n\nCP A2 ----> nodes {grid_copy.get_nodes()['node_type']}\n\n")
         self.connect_nodes(grid_copy)
         start_time = time.time()
 
