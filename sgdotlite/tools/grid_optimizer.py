@@ -771,8 +771,6 @@ class GridOptimizer:
                     )
                 )
         )
-        print(
-            f"starting number of hubs: {min(grid.get_nodes().shape[0], max(1, int(num_nodes / 10), grid.number_of_hubs_required_to_meet_allocation_capacity_constraint()))}")
         # initialize DataFrame to store number of hubs and according price
         price_per_number_hub_df = pd.DataFrame({"#hubs": [],
                                                 "price": []})
