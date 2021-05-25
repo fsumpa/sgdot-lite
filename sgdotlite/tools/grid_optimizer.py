@@ -2967,6 +2967,10 @@ class GridOptimizer:
             location), the price that is computed cannot be interpreted as the
             price of a feasible grid layout
         """
+
+        print(f"number_of_hubs should be : {number_of_hubs}")
+        print(f"CP A0 ----> {grid.get_nodes()['node_type']}")
+
         if save_output:
             print(f"|{42 * '_'}| NETWORK RELAXATION |{42 * '_'}|\n")
             print(f"{35 * ' '}number of hubs:{8 * ' '} {number_of_hubs}\n")
@@ -3102,7 +3106,8 @@ class GridOptimizer:
             raise Warning("invalid first_guess_strategy parameter, "
                           + "possibilities are:\n- 'random'\n- 'k_means'\n- "
                           + "'relax_input_grid'")
-
+        print(
+            f"\n\nCP A2 ----> nodes {grid_copy.get_nodes()['node_type']}\n\n")
         self.connect_nodes(grid_copy)
         start_time = time.time()
 
@@ -3279,8 +3284,8 @@ class GridOptimizer:
                 hub,
                 closest_node)
             for node in grid_copy.get_households().index:
-                if grid_copy.distance_between_nodes(hub, node) <\
-                        distance_to_closest_node:
+                if (grid_copy.distance_between_nodes(hub, node) <
+                        distance_to_closest_node) & (node not in node_choosen_to_be_hubs):
                     distance_to_closest_node = (
                         grid_copy.distance_between_nodes(
                             hub,

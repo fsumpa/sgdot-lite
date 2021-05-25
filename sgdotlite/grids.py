@@ -1362,8 +1362,8 @@ def import_grid(folder):
     nodes = pd.read_csv(folder + '/nodes.csv',
                         converters={
                             'label': str,
-                            'x_coordinate': int,
-                            'y_coordinate': int,
+                            'x_coordinate': float,
+                            'y_coordinate': float,
                             'node_type': str,
                             'type_fixed':
                                 lambda x: True if x == 'True' else False,
