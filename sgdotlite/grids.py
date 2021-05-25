@@ -352,6 +352,22 @@ class Grid:
 
         return is_capacity_constraint_too_strong
 
+    def number_of_hubs_required_to_meet_allocation_capacity_constraint(self):
+        """ This function computes the number of hubs with defauld capacity
+        required to meet allocation capacity constraint.
+
+        Output
+        ------
+            (int):
+                Number of hubs with default capacity required to meet
+                allocation capacity constraint.
+        """
+        # handle case where hubs are uncapcitated
+        if self.get_default_hub_capacity() == 0:
+            return 1
+
+        return int(np.ceil(self.get_nodes().shape[0]/(2 * self.get_default_hub_capacity())))
+
     def is_segment_spanning_tree(self, segment):
         """
         This methods checks wheter or not the given nodes from the segment

@@ -720,8 +720,8 @@ class GridOptimizer:
             grid.set_node_type(label, "meterhub")
         if not (grid.is_hub_capacity_constraint_too_strong()):
             self.connect_nodes(grid)
-        print(f"hubs after k-means: {grid.get_hubs().shape[0]}\nprice: {grid.price()}\n\n")
-
+        print(
+            f"hubs after k-means: {grid.get_hubs().shape[0]}\nprice: {grid.price()}\n\n")
 
     def get_expected_hub_number_from_k_means(self, grid):
         """
@@ -767,8 +767,14 @@ class GridOptimizer:
         self.set_k_means_configuration(
             grid_copy,
             min(grid.get_nodes().shape[0],
-                max(1, int(num_nodes / 10)))
+                max(1,
+                    int(num_nodes / 10),
+                    grid.number_of_hubs_required_to_meet_allocation_capacity_constraint()
+                    )
+                )
         )
+        print(
+            f"starting number of hubs: {min(grid.get_nodes().shape[0], max(1, int(num_nodes / 10), grid.number_of_hubs_required_to_meet_allocation_capacity_constraint()))}")
         # initialize DataFrame to store number of hubs and according price
         price_per_number_hub_df = pd.DataFrame({"#hubs": [],
                                                 "price": []})
@@ -3593,5 +3599,3 @@ class GridOptimizer:
         grid.set_nodes(nodes)
         grid.set_links(links)
         self.connect_nodes(grid)
-
-#v.1.0.15
