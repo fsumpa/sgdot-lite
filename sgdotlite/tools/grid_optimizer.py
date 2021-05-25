@@ -3041,7 +3041,7 @@ class GridOptimizer:
                 if not row['type_fixed']:
                     grid_copy.flip_node(hub)
 
-            # Create virtual hubs and add them at locations within
+            # Create virtual hubs and add them randomly at locations within
             # square containing all nodes
             for i in range(number_of_virtual_hubs):
                 grid_copy.add_node(label=f'V{i}',
@@ -3593,3 +3593,5 @@ class GridOptimizer:
         grid.set_nodes(nodes)
         grid.set_links(links)
         self.connect_nodes(grid)
+
+#v.1.0.15
