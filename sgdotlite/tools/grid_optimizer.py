@@ -751,6 +751,12 @@ class GridOptimizer:
         # make a copy of grid and perform changes and grid copy
         grid_copy = copy.deepcopy(grid)
 
+        allow_virtual_hubs_to_locate_freely = False
+
+        if not allow_virtual_hubs_to_locate_freely:
+            grid_copy.set_default_hub_capacity(
+                grid.get_default_hub_capacity() + 1)
+
         # Set all node types to household
         for node_with_fixed_type in grid_copy.get_nodes().index:
             grid_copy.set_type_fixed(node_with_fixed_type, False)
@@ -766,8 +772,7 @@ class GridOptimizer:
             grid_copy,
             min(grid.get_nodes().shape[0],
                 max(1,
-                    int(num_nodes / 10),
-                    grid.number_of_hubs_required_to_meet_allocation_capacity_constraint()
+                    int(num_nodes / 10)
                     )
                 )
         )

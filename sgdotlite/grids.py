@@ -798,6 +798,17 @@ class Grid:
             self.__nodes.at[str(hub_label),
                             'allocation_capacity'] = allocation_capacity
 
+    def set_default_hub_capacity(self, default_hub_capacity):
+        """
+        Set grid's _default_hub_capacity attibute to default_hub_capacity parameter.
+
+        Parameters
+        ----------
+        links (int):
+            Value to set to default hub capacity.
+        """
+        self.__default_hub_capacity = default_hub_capacity
+
     def shift_node(self,
                    node,
                    delta_x: float,
